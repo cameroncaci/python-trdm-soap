@@ -4,7 +4,7 @@ See workaround: https://github.com/xmlsec/python-xmlsec/issues/254#issuecomment-
 **virtual environment strongly recommended**
 
 ## WSDL Service
-*Generated from Suds*
+*Generated from Suds, not to be confused with current zeep implementation*
 
 **Service**: ReturnTable  
 
