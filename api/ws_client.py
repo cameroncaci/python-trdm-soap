@@ -9,26 +9,6 @@ wsdl_url = 'file:///Users/cameron/Projects/trdm-cron-lambda/wsdl/ReturnTableV7.w
 client = Client(wsdl=wsdl_url)
 client_return_table = client.bind('ReturnTable', 'ReturnTableWSSoapHttpPort')
 
-def get_last_table_update(physical_name):
-    return client_return_table.getLastTableUpdate(physical_name)
-
-# Convert the received REST call into ReturnTableInput type friendly
-def get_table(input_data):
-    if 'physicalName' not in input_data:
-        raise ValueError('The "physicalName" field is required.')
-
-    # Construct the data structure as required by the WSDL
-    data = {
-        'TRDM': {
-            'physicalName': input_data['physicalName'],
-            'contentUpdatedSinceDateTime': input_data.get('contentUpdatedSinceDateTime'),
-            'returnContent': input_data.get('returnContent', 'true'),
-        }
-    }
-    print("Constructed Data: ", data)
-
-    return client_return_table.getTable(data)
-
 '''
 Operations under ReturnTable -> ReturnTableWSSoapHttpPort
          Operations:

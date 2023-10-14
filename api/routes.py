@@ -1,15 +1,13 @@
 from flask import Blueprint, request, jsonify
-from .ws_client import get_last_table_update, get_table
+from .get_table import get_table
+from .last_table_update import get_last_table_update
 
 api = Blueprint('api', __name__)
 
-@api.route('/api/v1/lastTableUpdate', methods=['GET'])
+@api.route('/api/v1/lastTableUpdate', methods=['POST'])
 def last_table_update():
-    physical_name = request.args.get('physicalName')
-    if not physical_name:
-        return jsonify({"error": "physicalName is required"}), 400
-
-    response = get_last_table_update(physical_name)
+    input_data = request.json
+    response = get_last_table_update(input_data)
     return jsonify(response)
 
 @api.route('/api/v1/getTable', methods=['POST'])
