@@ -1,4 +1,5 @@
-from .ws_client import client_return_table
+from .ws_client import client, client_return_table
+from .print_envelope import print_envelope
 
 # Convert the received REST call into ReturnTableInput type friendly
 def get_table(input_data):
@@ -7,9 +8,13 @@ def get_table(input_data):
         'TRDM': {
             'physicalName': input_data.get('physicalName'),
             'contentUpdatedSinceDateTime': input_data.get('contentUpdatedSinceDateTime'),
-            'returnContent': input_data.get('returnContent', 'true'),
+            'returnContent': input_data.get('returnContent')
         }
     }
-    print("Constructed Data: ", data)
 
-    return client_return_table.getTable(data)
+    print("Constructed Data: ", data)
+    
+    node = client.create_message(client_return_table, 'getTable', input=data)
+    print("Node: ", node)
+    
+    print_envelope(node)
