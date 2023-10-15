@@ -1,12 +1,27 @@
+import datetime
 from zeep import Client
+from zeep.wsse.signature import Signature
+from zeep.wsse.utils import WSU
 
 # Declare vars for wsse creation
 public_key_path = 'pem/publickey.pem'
-private_key_path = 'pem/pricatekey.pem'
+private_key_path = 'pem/privatekey.pem'
 wsdl_url = 'file:///Users/cameron/Projects/trdm-cron-lambda/wsdl/ReturnTableV7.wsdl'
 
-# Create zeep client with binded service
-client = Client(wsdl=wsdl_url)
+# Create Timestamp
+timestamp_token = WSU.Timestamp()
+today_datetime = datetime.datetime.today()
+expires_datetime = today_datetime + datetime.timedelta(minutes=10)
+timestamp_elements = [
+    WSU.Created(today_datetime.strftime("%Y-%m-%dT%H:%M:%SZ")),
+    WSU.Expires(expires_datetime.strftime("%Y-%m-%dT%H:%M:%SZ"))
+]
+timestamp_token.extend(timestamp_elements)
+
+# Create zeep client with WSSE and Timestamp configured
+client = Client(wsdl=wsdl_url, wsse=Signature(private_key_path, public_key_path))
+
+# Bind ReturnTable service
 client_return_table = client.bind('ReturnTable', 'ReturnTableWSSoapHttpPort')
 
 '''
