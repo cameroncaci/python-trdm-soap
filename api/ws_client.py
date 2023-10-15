@@ -1,6 +1,6 @@
 import datetime
 from zeep import Client
-from zeep.wsse.signature import Signature
+from zeep.wsse.signature import BinarySignature
 from zeep.wsse.utils import WSU
 
 # Declare vars for wsse creation
@@ -19,7 +19,7 @@ timestamp_elements = [
 timestamp_token.extend(timestamp_elements)
 
 # Create zeep client with WSSE and Timestamp configured
-client = Client(wsdl=wsdl_url, wsse=Signature(private_key_path, public_key_path))
+client = Client(wsdl=wsdl_url, wsse=BinarySignature(private_key_path, public_key_path))
 
 # Bind ReturnTable service
 client_return_table = client.bind('ReturnTable', 'ReturnTableWSSoapHttpPort')
